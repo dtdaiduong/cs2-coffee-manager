@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserService implements IUserService {
-    public static String path = "data/users.csv";
+    public static String path = "CS2/data/users.csv";
     List<User> users = new ArrayList<>();
 
     public UserService() {
@@ -35,6 +35,7 @@ public class UserService implements IUserService {
         return null;
     }
 
+
     @Override
     public void add(User newUser) {
         users.add(newUser);
@@ -42,26 +43,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User getUserById(int id) {
-        for (User user : users) {
-            if (user.getId() == id)
-                return user;
-        }
-        return null;
-    }
-    @Override
-    public User getUserByUserType(UserType userType) {
-        for (User user : users) {
-            if (user.getUserType() == userType)
-                return user;
-        }
-        return null;
+    public void update() {
+        CSVUtils.write(path, users);
     }
 
     @Override
-    public User getUsername(String username) {
+    public User getUserById(int id) {
         for (User user : users) {
-            if (user.getUsername() == username)
+            if (user.getId() == id)
                 return user;
         }
         return null;
@@ -122,7 +111,6 @@ public class UserService implements IUserService {
     public void update(User newUser) {
         for (User user : users) {
             if (user.getId() == newUser.getId()) {
-//                user.setId(newUser.getId());
                 if (newUser.getFullName() != null && !newUser.getFullName().isEmpty())
                     user.setFullName(newUser.getFullName());
                 if (newUser.getEmail() != null && !newUser.getEmail().isEmpty())
@@ -143,8 +131,5 @@ public class UserService implements IUserService {
         update();
     }
 
-    @Override
-    public void update() {
-        CSVUtils.write(path, users);
-    }
+
 }

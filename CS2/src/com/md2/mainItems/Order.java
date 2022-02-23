@@ -1,6 +1,8 @@
 package com.md2.mainItems;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Order {
@@ -9,6 +11,7 @@ public class Order {
     private int quantity;
     private double price;
     private double totalPrice;
+    private String timeOder;
 
     private List<Order> orders = new ArrayList<>();
 
@@ -23,14 +26,16 @@ public class Order {
         quantity = Integer.parseInt(field[2]);
         price = Double.parseDouble(field[3]);
         totalPrice = Double.parseDouble(field[4]);
+        timeOder = field[5];
     }
 
-    public Order(long id, String drinkName, int quantity, double price, double totalPrice) {
+    public Order(long id, String drinkName, int quantity, double price, double totalPrice, String timeOder) {
         this.id = id;
         this.drinkName = drinkName;
         this.quantity = quantity;
         this.price = price;
         this.totalPrice = totalPrice;
+        this.timeOder = timeOder;
     }
 
     public long getId() {
@@ -73,8 +78,12 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
+    public String getTimeOder() {
+        return timeOder;
+    }
+
     @Override
     public String toString() {
-        return id + "," + drinkName + "," + quantity + "," + price + "," + totalPrice;
+        return id + "," + drinkName + "," + quantity + "," + price + "," + totalPrice + "," + timeOder;
     }
 }

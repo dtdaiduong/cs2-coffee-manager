@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StaffService implements IStaffService {
-    public static String path = "data/staff.csv";
+    public static String path = "CS2/data/staff.csv";
     List<Staff> staffs = new ArrayList<>();
 
     public StaffService() {
@@ -94,6 +94,8 @@ public class StaffService implements IStaffService {
                     staff.setEmail(newStaff.getEmail());
                 if (newStaff.getPhoneNumber() != null && !newStaff.getPhoneNumber().isEmpty())
                     staff.setPhoneNumber(newStaff.getPhoneNumber());
+                if (newStaff.getAddress() != null && !newStaff.getAddress().isEmpty())
+                    staff.setAddress(newStaff.getAddress());
                 if (newStaff.getAddress() != null && !newStaff.getAddress().isEmpty())
                     staff.setAddress(newStaff.getAddress());
                 CSVUtils.write(path, staffs);

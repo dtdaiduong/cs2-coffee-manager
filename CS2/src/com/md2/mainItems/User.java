@@ -6,9 +6,11 @@ public class User {
     private String phoneNumber;
     private String email;
     private String address;
-    private UserType userType;
     private String username;
     private String password;
+    private UserType userType;
+    private UserStatus activeStatus;
+
 
     public User(int id, String fullName, String phoneNumber, String email, String address, String username, String password) {
         this.id = id;
@@ -18,7 +20,6 @@ public class User {
         this.address = address;
         this.username = username;
         this.password = password;
-
     }
 
     public User(String draw) {
@@ -31,6 +32,7 @@ public class User {
         this.username = strings[5];
         this.password = strings[6];
         this.userType = UserType.parseUserType(strings[7]);
+        this.activeStatus= UserStatus.parseUserStatus(strings[8]);
     }
 
     public User() {
@@ -101,9 +103,17 @@ public class User {
         this.password = password;
     }
 
+    public UserStatus getActiveStatus() {
+        return activeStatus;
+    }
+
+    public void setActiveStatus(UserStatus activeStatus) {
+        this.activeStatus = activeStatus;
+    }
+
     @Override
     public String toString() {
-        return id + "," + fullName + "," + phoneNumber + "," + email + "," + address + "," + username + "," + password + "," + userType.getValue();
+        return id + "," + fullName + "," + phoneNumber + "," + email + "," + address + "," + username + "," + password + "," + userType.getValue() + "," + activeStatus.getValue();
     }
 
 }

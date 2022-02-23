@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderService implements IOrderService {
-    public static String path = "data/order.csv";
+    public static String path = "CS2/data/order.csv";
     List<Order> orders = new ArrayList<>();
 
     public OrderService() {

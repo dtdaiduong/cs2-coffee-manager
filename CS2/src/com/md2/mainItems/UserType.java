@@ -14,12 +14,13 @@ public enum UserType {
         return value;
     }
 
-    public static UserType parseUserType(String value){
+    public static UserType parseUserType(String value) {
         UserType[] values = values();
-        for (UserType userType :values){
+        for (UserType userType : values) {
             if (userType.value.equals(value))
                 return userType;
         }
         throw new IllegalArgumentException("invalid");
     }
+
 }

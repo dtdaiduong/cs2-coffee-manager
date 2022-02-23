@@ -1,31 +1,33 @@
 package com.md2.mainItems;
 
 public class Drink {
-    private int drinkId;
+    private String drinkId;
     private String drinkName;
     private double price;
+    private DrinkType drinkType;
 
     public Drink() {
     }
 
-    public Drink(int drinkId, String drinkName, double price) {
+    public Drink(String drinkId, String drinkName, double price) {
         this.drinkId = drinkId;
         this.drinkName = drinkName;
         this.price = price;
     }
 
-    public Drink(String draw){
+    public Drink(String draw) {
         String[] fields = draw.split(",");
-        drinkId = Integer.parseInt(fields[0]);
+        drinkId = fields[0];
         drinkName = fields[1];
         price = Double.parseDouble(fields[2]);
+        drinkType = DrinkType.parseDrinkType(fields[3]);
     }
 
-    public int getDrinkId() {
+    public String getDrinkId() {
         return drinkId;
     }
 
-    public void setDrinkId(int drinkId) {
+    public void setDrinkId(String drinkId) {
         this.drinkId = drinkId;
     }
 
@@ -45,9 +47,17 @@ public class Drink {
         this.price = price;
     }
 
+    public DrinkType getDrinkType() {
+        return drinkType;
+    }
+
+    public void setDrinkType(DrinkType drinkType) {
+        this.drinkType = drinkType;
+    }
+
     @Override
     public String toString() {
-        return drinkId + "," + drinkName + "," + price ;
+        return drinkId + "," + drinkName + "," + price + ","+ drinkType.getValue();
     }
 
 }

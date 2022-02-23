@@ -16,10 +16,6 @@ public interface IUserService{
 
     User getUserById(int id);
 
-    User getUserByUserType(UserType userType);
-
-    User getUsername(String username);
-
     boolean exist(int id);
 
     boolean checkDuplicateId(double id);

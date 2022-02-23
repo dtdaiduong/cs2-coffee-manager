@@ -1,7 +1,9 @@
 package com.md2.views;
 
+import com.md2.function.IStaffService;
 import com.md2.function.StaffService;
 import com.md2.mainItems.Staff;
+import com.md2.ulits.ConvertUtils;
 import com.md2.ulits.ValidateUtils;
 
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.Scanner;
 
 public class StaffView {
     public static List<Staff> staffs = new ArrayList<>();
-    private final StaffService staffService;
+    private final IStaffService staffService;
     private final Scanner scanner;
 
     public StaffView() {
@@ -35,7 +37,7 @@ public class StaffView {
             try {
                 System.out.println("Chọn chức năng: ");
                 System.out.print("⭆ ");
-                int number = Integer.parseInt(scanner.nextLine());
+                int number = Integer.parseInt(scanner.nextLine().trim());
                 switch (number) {
                     case 1:
                         addStaff();
@@ -50,7 +52,8 @@ public class StaffView {
                         remove();
                         break;
                     case 5:
-                        return;
+                        Menu.select(Menu.userLogin);
+                        break;
                     default:
                         System.out.println("Chọn chức năng không đúng!! Mời chọn lại!");
                         menuStaff();
@@ -65,76 +68,89 @@ public class StaffView {
     }
 
     public void addStaff() {
+        System.out.println("Nhấn phím bất kì để tiếp tục và 0 để hủy thao tác");
+        String cancel = scanner.nextLine();
+        if (cancel.equals("0")) return;
+
         int id;
         while (true) {
             System.out.println("Tạo ID cho nhân viên nào: ");
             System.out.print("\t➺ ");
-            Scanner input = new Scanner(System.in);
             try {
-                id = Integer.parseInt(input.nextLine());
+                id = Integer.parseInt(scanner.nextLine().trim());
                 if (id > 0) break;
                 System.out.println("Nhập ID sai rồi, nhập số dương đi ạ!");
             } catch (Exception e) {
                 System.out.println("Nhập ID sai rồi, nhập số đi ạ!");
             }
         }
+
+        System.out.println("Nhập họ và tên lưu ý viết hoa chữ cái đầu!!");
+        System.out.print("\t➺ ");
         String staffName;
+        String nameConvert;
+        boolean checkName = true;
         do {
-            System.out.println("Nhập tên cho nhân viên nào (Lưu ý không dấu và viết hoa chữ cái đầu): ");
-            System.out.print("\t➺ ");
-            staffName = scanner.nextLine();
-            while (!ValidateUtils.isNameValid(staffName)) {
-                System.out.println("Nhập sai rồi, nhớ nhập không dấu và viết hoa chữ cái đầu nhé!");
+            staffName = scanner.nextLine().trim();
+            nameConvert = ConvertUtils.removeAccent(staffName);
+            if (!ValidateUtils.isNameValid(nameConvert.trim())) {
+                System.out.println("Nhập sai rồi! lưu ý viết hoa chữ cái đầu!!");
                 System.out.print("\t➺ ");
-                staffName = scanner.nextLine();
+                checkName = false;
+            } else {
+                if (staffService.checkDuplicateStaffName(staffName.trim())) {
+                    System.out.println("Họ tên đã tồn tại");
+                    System.out.print("\t➺ ");
+                    checkName = false;
+                }
             }
-            if (staffService.checkDuplicateStaffName(staffName)) {
-                System.out.println("Trùng tên nhân viên rồi, nhập lại nào!");
-                System.out.print("\t➺ ");
-                staffName = null;
-            }
-        } while (staffName == null);
+        } while (!checkName);
 
+        System.out.println("Nhập số điện thoại và đủ 10 số và bắt đầu là số 0");
+        System.out.print("\t➺ ");
         String phoneNumber;
+        boolean checkPhone = true;
         do {
-            System.out.println("Nhập số điện thoại nào (Lưu ý nhập đủ 10 số nhé!)");
-            System.out.print("\t➺ ");
-            phoneNumber = scanner.nextLine();
-            while (!ValidateUtils.isPhoneValid(phoneNumber)) {
-                System.out.println("Nhập sai rồi, nhớ bắt đầu bằng số 0 và đủ 10 số nhé!");
+            phoneNumber = scanner.nextLine().trim();
+            if (!ValidateUtils.isPhoneValid(phoneNumber)) {
+                System.out.println("Số điện thoại bao gồm 10 số và bắt đầu là số 0");
                 System.out.print("\t➺ ");
-                phoneNumber = scanner.nextLine();
+                checkPhone = false;
+            } else {
+                if (staffService.checkDuplicatePhone(phoneNumber)) {
+                    System.out.println("Số điện thoại này đã tồn tại! vui lòng kiểm tra lại!");
+                    System.out.print("\t➺ ");
+                    checkPhone = false;
+                }
             }
-            if (staffService.checkDuplicatePhone(phoneNumber)) {
-                System.out.println("Trùng số điện thoại rồi, nhập số khác đi!");
-                System.out.print("\t➺ ");
-                phoneNumber = null;
-            }
-        } while (phoneNumber == null);
+        } while (!checkPhone);
 
+        System.out.println("Nhập email: ");
+        System.out.print("\t➺ ");
         String email;
+        boolean checkEmail = true;
         do {
-            System.out.println("Nhập Email nào: ");
-            System.out.print("\t➺ ");
-            email = scanner.nextLine();
-            while (!ValidateUtils.isEmailValid(email)) {
-                System.out.println("Nhập sai rồi, Nhập lại theo mẫu abc@gmail.com(.vn)");
+            email = scanner.nextLine().trim();
+            if (!ValidateUtils.isEmailValid(email)) {
+                System.out.println("Email của bạn không đúng định dạng! Vui lòng kiểm tra và nhập lại ");
+                System.out.println("Ví dụ: abcd@gmail.com");
                 System.out.print("\t➺ ");
-                email = scanner.nextLine();
+                checkEmail = false;
+            } else {
+                if (staffService.checkDuplicateEmail(email)) {
+                    System.out.println("Email " + email + " của bạn đã tồn tại! vui lòng kiểm tra lại");
+                    System.out.print("\t➺ ");
+                    checkEmail = false;
+                }
             }
-            if (staffService.checkDuplicateEmail(email)) {
-                System.out.println("Trùng Email rồi, chọn cái khác đi!");
-                System.out.print("\t➺ ");
-                email = null;
-            }
-        } while (email == null);
+        } while (!checkEmail);
 
         System.out.println("Nhập địa chỉ:");
         System.out.print("\t➺ ");
-        String address = scanner.nextLine();
+        String address = scanner.nextLine().trim();
         System.out.println("Nhập chức vụ nhân viên nào: ");
         System.out.print("\t➺ ");
-        String department = scanner.nextLine();
+        String department = scanner.nextLine().trim();
         Staff staff = new Staff(id, staffName, phoneNumber, email, address, department);
         staffService.add(staff);
         boolean check = true;
@@ -143,14 +159,14 @@ public class StaffView {
             System.out.println("|   Nhấn 'm'(more) để thêm tiếp người dùng     |");
             System.out.println("|        'b'(back) để quay lại User Manager    |");
             System.out.println("|----------------------------------------------|");
-            String choice = scanner.nextLine();
+            System.out.print("\t➺ ");
+            String choice = scanner.nextLine().trim();
             switch (choice) {
                 case "m":
                     addStaff();
                     break;
                 case "b":
-                    optionMenuStaff();
-                    break;
+                    return;
                 default:
                     System.out.println("!!Chọn 'm' hoặc 'b' để thực hiện chức năng!!");
                     check = false;
@@ -160,10 +176,10 @@ public class StaffView {
 
     public void showStaff() {
         System.out.println("|--------------------------------------------------------------------------------------|");
-        System.out.printf("|%-8s %-15s %-15s %-18s %-13s %-12s|\n", "ID", "Họ và Tên", "Số điện thoại", "Email", "Địa chỉ", "Chức vụ");
+        System.out.printf("|%-10s %-25s %-15s %-20s %-20s %-12s|\n", "ID", "Họ và Tên", "Số điện thoại", "Email", "Địa chỉ", "Chức vụ");
         List<Staff> staffs = staffService.getStaffs();
         for (Staff staff : staffs) {
-            System.out.printf("|%-8d %-15s %-15s %-18s %-13s %-12s|\n", staff.getStaffId(), staff.getStaffName(), staff.getPhoneNumber(), staff.getEmail(), staff.getAddress(), staff.getDepartment());
+            System.out.printf("|%-10s %-25s %-15s %-20s %-20s %-12s|\n", staff.getStaffId(), staff.getStaffName(), staff.getPhoneNumber(), staff.getEmail(), staff.getAddress(), staff.getDepartment());
         }
         System.out.println("|--------------------------------------------------------------------------------------|");
         System.out.println("   ");
@@ -180,11 +196,10 @@ public class StaffView {
                 System.out.println("|       'e'(exit) để thoát chương trình     |");
                 System.out.println("|-------------------------------------------|");
                 System.out.print("\t➺ ");
-                String choice = scanner.nextLine();
+                String choice = scanner.nextLine().trim();
                 switch (choice) {
                     case "b":
-                        optionMenuStaff();
-                        break;
+                        return;
                     case "e":
                         Menu.exit();
                         System.exit(0);
@@ -200,15 +215,18 @@ public class StaffView {
     }
 
     public void updateStaff() {
+        System.out.println("Nhấn phím bất kì để tiếp tục và 0 để hủy thao tác");
+        String cancel = scanner.nextLine();
+        if (cancel.equals("0")) return;
+
         try {
             showStaff();
             int id;
             while (true) {
                 System.out.println("Nhập ID của người dùng bạn muốn sửa");
                 System.out.print("\t➺ ");
-                Scanner input = new Scanner(System.in);
                 try {
-                    id = Integer.parseInt(input.nextLine());
+                    id = Integer.parseInt(scanner.nextLine().trim());
                     while (!staffService.checkDuplicateId(id)) {
                         System.out.println("ID" + id + "của bạn không tồn tại! vui lòng kiểm tra lại!!");
                         System.out.print("\t➺ ");
@@ -234,86 +252,114 @@ public class StaffView {
                     System.out.println("|-----------------------------|");
                     System.out.println("Chọn chức năng");
                     System.out.print("\t➺ ");
-                    int choice = Integer.parseInt(scanner.nextLine());
+                    int choice = Integer.parseInt(scanner.nextLine().trim());
                     Staff staff = new Staff();
                     staff.setStaffId(id);
-                    switch (choice) {
-                        case 1:
-                            System.out.println("Nhập tên nhân viên không dấu và lưu ý viết hoa chữ cái đầu!!");
-                            System.out.print("\t➺ ");
-                            String StaffNameUpdate = scanner.nextLine();
-                            while (!ValidateUtils.isNameValid(StaffNameUpdate)) {
-                                System.out.println("Nhập sai rồi! lưu ý viết hoa chữ cái đầu!!");
-                                System.out.printf("\t➺ ");
-                                StaffNameUpdate = scanner.nextLine();
-                            }
-                            while (staffService.checkDuplicateStaffName(StaffNameUpdate)) {
-                                System.out.println("Họ tên đã tồn tại");
-                                StaffNameUpdate = scanner.nextLine();
-                            }
-                            staff.setStaffName(StaffNameUpdate);
-                            staffService.update(staff);
-                            System.out.println("Đổi tên thành công rồi!!");
-                            break;
-                        case 2:
-                            System.out.println("Nhập số điện thoại muốn sửa đổi");
-                            System.out.print("\t➺ ");
-                            String phoneNumberUpdate = scanner.nextLine();
-                            while (!ValidateUtils.isPhoneValid(phoneNumberUpdate)) {
-                                System.out.println("Số điện thoại bao gồm 10 số và bắt đầu là số 0!! Nhập lại nào!");
+//                    boolean checkChoice = true;
+//                    do {
+                        switch (choice) {
+                            case 1:
+                                System.out.println("Nhập tên người và lưu ý viết hoa chữ cái đầu!!");
                                 System.out.print("\t➺ ");
-                                phoneNumberUpdate = scanner.nextLine();
-                            }
-                            while (staffService.checkDuplicatePhone(phoneNumberUpdate)) {
-                                System.out.println("Số điện thoại này đã tồn tại! Mời bạn nhập lại");
+                                String fullNameUpdate;
+                                String namecheck;
+                                boolean checkUpdate = true;
+                                do {
+                                    fullNameUpdate = scanner.nextLine().trim();
+                                    namecheck = ConvertUtils.removeAccent(fullNameUpdate);
+                                    if (!ValidateUtils.isNameValid(namecheck.trim())) {
+                                        System.out.println("Nhập sai rồi! lưu ý viết hoa chữ cái đầu!!");
+                                        System.out.print("\t➺ ");
+                                        checkUpdate = false;
+                                    } else {
+                                        if (!staffService.checkDuplicateStaffName(fullNameUpdate.trim())) {
+                                            System.out.println("Họ tên đã tồn tại");
+                                            System.out.print("\t➺ ");
+                                            checkUpdate = false;
+                                        }
+                                    }
+                                } while (!checkUpdate);
+                                staff.setStaffName(fullNameUpdate);
+                                staffService.update(staff);
+                                System.out.println("Đổi tên thành công rồi!!");
+                                break;
+                            case 2:
+                                System.out.println("Nhập số điện thoại muốn sửa đổi");
                                 System.out.print("\t➺ ");
-                                phoneNumberUpdate = scanner.nextLine();
-                            }
-                            staff.setPhoneNumber(phoneNumberUpdate);
-                            staffService.update(staff);
-                            System.out.println("Đổi số điện thoại thành công");
-                            break;
-                        case 3:
-                            System.out.println("Nhập Email muốn sửa đổi: ");
-                            System.out.print("\t➺ ");
-                            String emailUpdate = scanner.nextLine();
-                            while (!ValidateUtils.isEmailValid(emailUpdate)) {
-                                System.out.println("Email sai rồi, nhớ nhập theo dạng abc@gmail.com(.vn)");
-                                System.out.print("\t➺ ");
-                                emailUpdate = scanner.nextLine();
-                            }
-                            while (staffService.checkDuplicateEmail(emailUpdate)) {
-                                System.out.println("Email này đã tồn tại! Nhập cái mới đi nào!!");
-                                System.out.print("\t➺ ");
-                                emailUpdate = scanner.nextLine();
-                            }
-                            staff.setEmail(emailUpdate);
-                            staffService.update(staff);
-                            System.out.println("Đổi Email thành công!");
-                            break;
+                                String phoneNumberUpdate;
+                                boolean checkPhone = true;
+                                do {
+                                    phoneNumberUpdate = scanner.nextLine().trim();
+                                    if (!ValidateUtils.isPhoneValid(phoneNumberUpdate)) {
+                                        System.out.println("Số điện thoại bao gồm 10 số và bắt đầu là số 0!! Nhập lại nào!");
+                                        System.out.print("\t➺ ");
+                                        checkPhone = false;
+                                    } else {
+                                        if (staffService.checkDuplicatePhone(phoneNumberUpdate)) {
+                                            System.out.println("Số điện thoại này đã tồn tại! Mời bạn nhập lại");
+                                            System.out.print("\t➺ ");
+                                            checkPhone = false;
+                                        }
+                                    }
+                                } while (!checkPhone);
 
-                        case 4:
-                            System.out.println("Nhập địa chỉ muốn đổi");
-                            System.out.print("\t➺ ");
-                            String address = scanner.nextLine();
-                            staff.setAddress(address);
-                            staffService.update(staff);
-                            System.out.println("Đổi địa chỉ thành công");
-                            break;
-                        case 5:
-                            System.out.println("Nhập chức vụ bạn muốn sửa: ");
-                            System.out.print("\t➺ ");
-                            String department = scanner.nextLine();
-                            staff.setDepartment(department);
-                            staffService.update(staff);
-                            System.out.println("Sửa thành công");
-                        case 6:
-                            optionMenuStaff();
-                            break;
-                        default:
-                            System.out.println("Vui lòng chọn số theo chức năng bên dưới!!");
+                                staff.setPhoneNumber(phoneNumberUpdate);
+                                staffService.update(staff);
+                                System.out.println("Đổi số điện thoại thành công");
+                                break;
+
+                            case 3:
+                                System.out.println("Nhập Email muốn sửa đổi: ");
+                                System.out.print("\t➺ ");
+                                String emailUpdate;
+                                boolean checkEmail = true;
+                                do {
+                                    emailUpdate = scanner.nextLine().trim();
+                                    if (!ValidateUtils.isEmailValid(emailUpdate)) {
+                                        System.out.println("Email sai rồi, nhớ nhập theo dạng abc@gmail.com(.vn)");
+                                        System.out.print("\t➺ ");
+                                        checkEmail = false;
+                                    } else {
+                                        if (staffService.checkDuplicateEmail(emailUpdate)) {
+                                            System.out.println("Email này đã tồn tại! Nhập cái mới đi nào!!");
+                                            System.out.print("\t➺ ");
+                                            checkEmail = false;
+                                        }
+                                    }
+                                } while (!checkEmail);
+
+                                staff.setEmail(emailUpdate);
+                                staffService.update(staff);
+                                System.out.println("Đổi Email thành công!");
+                                break;
+
+                            case 4:
+                                System.out.println("Nhập địa chỉ muốn đổi");
+                                System.out.print("\t➺ ");
+                                String address = scanner.nextLine().trim();
+                                staff.setAddress(address);
+                                staffService.update(staff);
+                                System.out.println("Đổi địa chỉ thành công");
+                                break;
+
+                            case 5:
+                                System.out.println("Nhập chức vụ bạn muốn sửa: ");
+                                System.out.print("\t➺ ");
+                                String department = scanner.nextLine().trim();
+                                staff.setDepartment(department);
+                                staffService.update(staff);
+                                System.out.println("Sửa thành công");
+                                break;
+
+                            case 6:
+                                return;
+                            default:
+                                System.out.println("Vui lòng chọn số theo chức năng bên dưới!!");
+//                                checkChoice = false;
+//                                break;
                             updateStaff();
-                    }
+                        }
+//                    }while (!checkChoice);
                     boolean is = true;
                     do {
                         System.out.println("|--------------------------------------------|");
@@ -322,7 +368,7 @@ public class StaffView {
                         System.out.println("|        'b'(back) để quay lại User Manager  |");
                         System.out.println("|--------------------------------------------|");
                         System.out.print("\t➺ ");
-                        String choice1 = scanner.nextLine();
+                        String choice1 = scanner.nextLine().trim();
                         switch (choice1) {
                             case "m":
                                 check = false;
@@ -331,8 +377,7 @@ public class StaffView {
                                 updateStaff();
                                 break;
                             case "b":
-                                optionMenuStaff();
-                                break;
+                                return;
                             default:
                                 System.out.println("Nhấn không đúng! vui lòng chọn lại");
                                 is = false;
@@ -348,11 +393,15 @@ public class StaffView {
         }
     }
 
-    public void remove () {
+    public void remove() {
         showStaff();
+        System.out.println("Nhấn phím bất kì để tiếp tục và 0 để hủy thao tác");
+        String cancel = scanner.nextLine();
+        if (cancel.equals("0")) return;
+
         System.out.println("Nhập ID người dùng cần xóa");
         System.out.print("\t➺ ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = Integer.parseInt(scanner.nextLine().trim());
         Staff staff = staffService.getStaffById(id);
         if (staff == null)
             System.out.println(" ⭆ Mgười dùng này không tồn tại!! ");

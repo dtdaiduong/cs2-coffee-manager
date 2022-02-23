@@ -8,7 +8,7 @@ import java.util.List;
 
 public class DrinkService implements IDrinkService {
     List<Drink> drinks = new ArrayList<>();
-    public static String path = "data/drinks.csv";
+    public static String path = "CS2/data/drinks.csv";
 
     public DrinkService() {
         getDrinks();
@@ -36,9 +36,9 @@ public class DrinkService implements IDrinkService {
     }
 
     @Override
-    public Drink getDrinkById(double id) {
+    public Drink getDrinkById(String id) {
         for (Drink drink : drinks) {
-            if (drink.getDrinkId() == id)
+            if (drink.getDrinkId().equalsIgnoreCase(id))
                 return drink;
         }
         return null;
@@ -54,14 +54,14 @@ public class DrinkService implements IDrinkService {
     }
 
     @Override
-    public boolean exist(double id) {
+    public boolean exist(String id) {
         return getDrinkById(id) != null;
     }
 
     @Override
-    public boolean checkDuplicateId(double id) {
+    public boolean checkDuplicateId(String id) {
         for (Drink drink : drinks) {
-            if (drink.getDrinkId() == id)
+            if (drink.getDrinkId().equalsIgnoreCase(id))
                 return true;
         }
         return false;

@@ -11,13 +11,13 @@ public interface IDrinkService {
 
     void update();
 
-    Drink getDrinkById(double id);
+    Drink getDrinkById(String id);
 
     Drink getDrinkByName(String name);
 
-    boolean exist(double id);
+    boolean exist(String id);
 
-    boolean checkDuplicateId(double id);
+    boolean checkDuplicateId(String id);
 
     boolean checkDuplicateName(String name);
 
