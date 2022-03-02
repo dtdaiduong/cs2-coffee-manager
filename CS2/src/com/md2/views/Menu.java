@@ -14,21 +14,21 @@ public class Menu {
     public static User userLogin;
 
     public static void menuAdmin() {
-        System.out.println("|---------- CAFE MANAGER -----------|");
-        System.out.println("|   1. Quản lý người dùng           |");
-        System.out.println("|   2. Quản lý Thức uống            |");
-        System.out.println("|   3. Quản lý nhân viên            |");
-        System.out.println("|   4. Quản lý đơn hàng             |");
-        System.out.println("|   5. Thoát chương trình           |");
-        System.out.println("|-----------------------------------|");
+        System.out.println("\t\t\t\t|---------- CAFE MANAGER -----------|");
+        System.out.println("\t\t\t\t|   1. Quản lý người dùng           |");
+        System.out.println("\t\t\t\t|   2. Quản lý Thức uống            |");
+        System.out.println("\t\t\t\t|   3. Quản lý nhân viên            |");
+        System.out.println("\t\t\t\t|   4. Quản lý đơn hàng             |");
+        System.out.println("\t\t\t\t|   5. Thoát chương trình           |");
+        System.out.println("\t\t\t\t|-----------------------------------|");
     }
 
     public static void menuUser() {
-        System.out.println("|---------- CAFE MANAGER -----------|");
-        System.out.println("|   1. Quản lý Thức uống            |");
-        System.out.println("|   2. Kiểm tra đơn hàng            |");
-        System.out.println("|   3. Thoát chương trình           |");
-        System.out.println("|-----------------------------------|");
+        System.out.println("\t\t\t\t|---------- CAFE MANAGER -----------|");
+        System.out.println("\t\t\t\t|   1. Quản lý Thức uống            |");
+        System.out.println("\t\t\t\t|   2. Kiểm tra đơn hàng            |");
+        System.out.println("\t\t\t\t|   3. Thoát chương trình           |");
+        System.out.println("\t\t\t\t|-----------------------------------|");
     }
 
     static UserView userView = new UserView();
@@ -43,8 +43,8 @@ public class Menu {
                 menuAdmin();
                 try {
                     Scanner scanner = new Scanner(System.in);
-                    System.out.println("Lựa chọn chức năng muốn thực hiện: ");
-                    System.out.print("\t➺ ");
+                    System.out.println("\t\t\t\tLựa chọn chức năng muốn thực hiện: ");
+                    System.out.print("\t\t\t\t\t➺ ");
                      number = Integer.parseInt(scanner.nextLine());
                     switch (number) {
                         case 1:
@@ -63,13 +63,13 @@ public class Menu {
                             exit();
                             break;
                         default:
-                            System.out.println("Vui lòng chọn số theo menu");
+                            System.out.println("\t\t\t\t❌ Vui lòng chọn số theo menu");
                             break;
                     }
                 } catch (InputMismatchException io) {
-                    System.out.println("Nhập sai! Vui lòng nhập lại số theo menu");
+                    System.out.println("\t\t\t\t❌ Nhập sai! Vui lòng nhập lại số theo menu");
                 } catch (Exception e) {
-                    System.out.println("❌ Không nhập chữ nhé!! ");
+                    System.out.println("\t\t\t\t❌ Không nhập chữ nhé!! ");
                 }
             } while (number !=5);
         } else {
@@ -77,8 +77,8 @@ public class Menu {
                 menuUser();
                 try {
                     Scanner scanner = new Scanner(System.in);
-                    System.out.println("Lựa chọn chức năng muốn thực hiện: ");
-                    System.out.print("\t➺ ");
+                    System.out.println("\t\t\t\tLựa chọn chức năng muốn thực hiện: ");
+                    System.out.print("\t\t\t\t\t➺ ");
                     number = Integer.parseInt(scanner.nextLine());
                     switch (number) {
                         case 1:
@@ -91,40 +91,40 @@ public class Menu {
                             exit();
                             break;
                         default:
-                            System.out.println("Vui lòng chọn số theo menu");
+                            System.out.println("\t\t\t\t❌ Vui lòng chọn số theo menu");
                             break;
                     }
                 } catch (InputMismatchException io) {
-                    System.out.println("Nhập sai! Vui lòng nhập lại số theo menu");
+                    System.out.println("\t\t\t\t❌ Nhập sai! Vui lòng nhập lại số theo menu");
                 } catch (Exception e) {
-                    System.out.println("❌ Không nhập chữ nhé!! ");
+                    System.out.println("\t\t\t\t❌ Không nhập chữ nhé!! ");
                 }
             } while (number!=4);
         }
     }
 
     public static void exit() {
-        System.out.println("bye ạ!");
+        System.out.println("\t\t\t\tbye ạ!");
         System.exit(5);
     }
 
     public static void loginAdmin() {
-        System.out.println("* * * * * * * * *  ĐĂNG NHẬP HỆ THỐNG * * * * * * * * *");
-        System.out.println("Username");
-        System.out.print("\t➺ ");
+        System.out.println("\t\t\t\t* * * * * * * * *  ĐĂNG NHẬP HỆ THỐNG * * * * * * * * *");
+        System.out.println("\t\t\t\tUsername");
+        System.out.print("\t\t\t\t\t➺ ");
         String username = scanner.nextLine();
-        System.out.println("Mật khẩu");
-        System.out.print("\t➺ ");
+        System.out.println("\t\t\t\tMật khẩu");
+        System.out.print("\t\t\t\t\t➺ ");
         String password = scanner.nextLine();
 
         userLogin = userService.login(username, password);
         if (userLogin != null) {
             if (userLogin.getActiveStatus()== UserStatus.LICENSED){
-                System.out.println("Bạn đã đăng nhập thành công");
+                System.out.println("\t\t\t\tBạn đã đăng nhập thành công");
                 select(userLogin);
-            }else System.out.println("Tài khoản này chưa được cấp quyền sử dụng");
+            }else System.out.println("\t\t\t\t❌ Tài khoản này chưa được cấp quyền sử dụng");
         } else {
-            System.out.println("Bạn đã nhập sai thông tin!! ");
+            System.out.println("\t\t\t\t❌ Bạn đã nhập sai thông tin!! ");
             selectLogin();
         }
     }
@@ -149,7 +149,7 @@ public class Menu {
                     System.exit(0);
                     break;
                 default:
-                    System.out.println("Chọn chức năng không đúng! Vui lòng chọn lại ");
+                    System.out.println("❌ Chọn chức năng không đúng! Vui lòng chọn lại ");
                     login = false;
             }
         }while (!login);

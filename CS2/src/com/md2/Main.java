@@ -10,7 +10,7 @@ public class Main {
 //        orderView.addOrder();
 //        DrinkView drinkView = new DrinkView();
 //        drinkView.optionMenuDrink();
-        UserView userView = new UserView();
+//        UserView userView = new UserView();
 //        userView.accessPermissions();
     }
 
